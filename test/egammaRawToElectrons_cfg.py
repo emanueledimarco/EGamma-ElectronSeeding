@@ -9,6 +9,14 @@ process.load("Configuration.StandardSequences.DigiToRaw_cff")
 process.load("Configuration.StandardSequences.RawToDigi_cff")
 process.load("Configuration.StandardSequences.Reconstruction_cff")
 
+###### HERE IS THE PART THAT YOU WANT TO CONFIGURE #######
+usePFClusters = True
+##########################################################
+
+if usePFClusters:
+    process.ecalDrivenElectronSeeds.barrelSuperClusters = 'particleFlowClusterECAL'
+    process.ecalDrivenElectronSeeds.endcapSuperClusters = 'particleFlowClusterECAL'
+
 process.maxEvents = cms.untracked.PSet(
     input = cms.untracked.int32(10)
 )
@@ -21,11 +29,15 @@ process.source = cms.Source("PoolSource",
 
 process.out = cms.OutputModule("PoolOutputModule",
     outputCommands = cms.untracked.vstring('drop *', 
-        'keep recoSuperClusters*_*_*_*', 
-        'keep *_*_*_electrons', 
-        'keep *HepMCProduct_*_*_*'),
+                                           'keep *_*_*_electrons', 
+                                           'keep *HepMCProduct_*_*_*',
+                                           'keep *_genParticles_*_*',
+                                           'keep *_addPileupInfo_*_*'
+                                           ),
     fileName = cms.untracked.string('electrons.root')
 )
+
+
 
 process.localreco = cms.Sequence(process.trackerlocalreco+
                                  process.muonlocalreco+
@@ -42,9 +54,13 @@ process.gloabalreco = cms.Sequence(process.offlineBeamSpot*
                                    process.vertexreco*
                                    process.egammaGlobalReco)
 
+process.reducedRecHits = cms.Sequence (process.reducedEcalRecHitsSequence *
+                                       process.reducedHcalRecHitsSequence )
+
 process.highlevelreco = cms.Sequence(process.egammaHighLevelRecoPrePF*
                                      process.particleFlowReco*
-                                     process.egammaHighLevelRecoPostPF)
+                                     process.egammaHighLevelRecoPostPF*
+                                     process.reducedRecHits)
 
 process.p = cms.Path(process.DigiToRaw*
                      process.RawToDigi*
