@@ -1,0 +1,14 @@
+cmsrel CMSSW_7_0_0_pre3
+cd CMSSW_7_0_0_pre3/src
+cmsenv 
+git cms-addpkg Configuration/StandardSequences
+
+- change the sequence run:
+DigiToRaw = cms.Sequence(csctfpacker*dttfpacker*gctDigiToRaw*l1GtPack*l1GtEvmPack*siPixelRawData*SiStripDigiToRaw*ecalPacker*esDigiToRaw*hcalRawData*cscpacker*dtpacker*rpcpacker*rawDataCollector)
+#DigiToRaw = cms.Sequence(csctfpacker*dttfpacker*gctDigiToRaw*l1GtPack*l1GtEvmPack*siPixelRawData*SiStripDigiToRaw*ecalPacker*esDigiToRaw*hcalRawData*cscpacker*dtpacker*rpcpacker*castorRawData*rawDataCollector)
+
+git clone git@github.com:emanueledimarco/EGamma-ElectronSeeding.git EGamma/ElectronSeeding
+git clone git@github.com:emanueledimarco/EGamma-DataTree.git EGamma/DataTree
+git clone git@github.com:emanueledimarco/AnalysisTools-Common.git AnalysisTools/Common
+
+scram b -j8
