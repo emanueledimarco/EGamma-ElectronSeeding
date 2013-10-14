@@ -14,8 +14,8 @@ usePFClusters = True
 ##########################################################
 
 if usePFClusters:
-    process.ecalDrivenElectronSeeds.barrelSuperClusters = 'particleFlowSuperClusterECAL'
-    process.ecalDrivenElectronSeeds.endcapSuperClusters = 'particleFlowSuperClusterECAL'
+    process.ecalDrivenElectronSeeds.barrelSuperClusters = 'particleFlowSuperClusterECAL:particleFlowSuperClusterECALBarrel'
+    process.ecalDrivenElectronSeeds.endcapSuperClusters = 'particleFlowSuperClusterECAL:particleFlowSuperClusterECALEndcapWithPreshower'
 
 process.maxEvents = cms.untracked.PSet(
     input = cms.untracked.int32(10)
